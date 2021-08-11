@@ -25,15 +25,37 @@
     </nav>
     <div class="container pt-5">
       <div class="row">
-        <ul>
-          <% sightings.forEach(sighting => { %>
-          <li>
-            <a href="/sighting/<%= sighting.idx %>"
-              >Sighting <%= sighting.idx %></a
-            >
-          </li>
-          <% }) %>
-        </ul>
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col" class="text-center">Sighting</th>
+              <th scope="col" class="text-center">Link</th>
+              <th scope="col">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% sightings.forEach(sighting => { %>
+            <tr>
+              <th scope="row" class="text-center align-middle">
+                <%= sighting.idx %>
+              </th>
+              <td class="text-center align-middle">
+                <a href="/sighting/<%= sighting.idx %>">
+                  <%= sighting.summary %>
+                </a>
+              </td>
+              <td class="align-middle">
+                <form
+                  action="/sighting/<%= sighting.idx %>/delete?_method=DELETE"
+                  method="POST"
+                >
+                  <input class="btn btn-danger" type="submit" value="Delete" />
+                </form>
+              </td>
+            </tr>
+            <% }) %>
+          </tbody>
+        </table>
       </div>
     </div>
 
