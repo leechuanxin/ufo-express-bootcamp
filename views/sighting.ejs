@@ -20,7 +20,16 @@
     <nav class="navbar navbar-dark bg-dark fixed-top">
       <!-- Navbar content -->
       <div class="container-fluid">
-        <a class="navbar-brand" href="#">Sighting ID: <%= idx %></a>
+        <div class="row w-100">
+          <div class="col-6">
+            <a class="navbar-brand" href="#">Sighting ID: <%= idx %></a>
+          </div>
+          <div class="col-6 text-end">
+            <a class="btn btn-outline-light" href="/sighting/<%= idx %>/edit"
+              >Edit</a
+            >
+          </div>
+        </div>
       </div>
     </nav>
     <div class="container pt-5">
