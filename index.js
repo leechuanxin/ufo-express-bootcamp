@@ -5,6 +5,7 @@ import { add, read, write } from './jsonFileStorage.js';
 const app = express();
 const PORT = process.argv[2];
 const FILENAME = './data.json';
+const SUMMARY_CHAR_LIMIT = 100;
 
 // Set view engine
 app.set('view engine', 'ejs');
@@ -84,9 +85,9 @@ app.put('/sighting/:index/edit', (request, response) => {
       data.sightings[request.params.index - 1] = {
         ...request.body,
         summary: request.body.text
-          .substring(0, 150)
+          .substring(0, SUMMARY_CHAR_LIMIT)
           .concat(
-            (textLength > 150) ? '...' : '',
+            (textLength > SUMMARY_CHAR_LIMIT) ? '...' : '',
           ),
       };
       write(FILENAME, data, (error) => {
@@ -104,9 +105,9 @@ app.post('/sighting', (request, response) => {
   const sighting = {
     ...request.body,
     summary: request.body.text
-      .substring(0, 150)
+      .substring(0, SUMMARY_CHAR_LIMIT)
       .concat(
-        (textLength > 150) ? '...' : '',
+        (textLength > SUMMARY_CHAR_LIMIT) ? '...' : '',
       ),
   };
   // Add new recipe data in request.body to recipes array in data.json.
