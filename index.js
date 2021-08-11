@@ -10,6 +10,21 @@ app.set('view engine', 'ejs');
 // To receive POST request body data in request.body
 app.use(express.urlencoded({ extended: false }));
 
+app.get('/', (request, response) => {
+  read(FILENAME, (err, data) => {
+    const { sightings } = data;
+    const sightingsIdx = sightings
+      .map(
+        (sighting, index) => ({ ...sighting, idx: index + 1 }),
+      );
+    const sightingsIdxObj = {
+      sightings: sightingsIdx,
+    };
+    console.log(sightingsIdxObj);
+    response.render('index', sightingsIdxObj);
+  });
+});
+
 app.get('/sighting', (request, response) => {
   response.render('newsighting');
 });
