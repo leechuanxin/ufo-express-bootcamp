@@ -1,5 +1,5 @@
 import express from 'express';
-import { add } from './jsonFileStorage.js';
+import { add, read } from './jsonFileStorage.js';
 
 const app = express();
 const PORT = process.argv[2];
@@ -11,7 +11,23 @@ app.set('view engine', 'ejs');
 app.use(express.urlencoded({ extended: false }));
 
 app.get('/sighting', (request, response) => {
-  response.render('sighting');
+  response.render('newsighting');
+});
+
+app.get('/sighting/:index', (request, response) => {
+  read(FILENAME, (err, data) => {
+    if (request.params.index > data.sightings.length || request.params.index < 1) {
+      response.status(404).send('Sorry, we cannot find that!');
+    } else {
+      // page indexes/ids start from 1 instead of 0
+      const sighting = data.sightings[request.params.index - 1];
+      const sightingWithIndex = {
+        ...sighting,
+        idx: request.params.index,
+      };
+      response.render('sighting', sightingWithIndex);
+    }
+  });
 });
 
 app.post('/sighting', (request, response) => {
@@ -31,10 +47,10 @@ app.post('/sighting', (request, response) => {
       return;
     }
 
-    console.log('Successful creation of new sighting.');
-    console.log('Sighting:', sighting);
-
-    response.status(200).send('Submitted successfully!');
+    const obj = JSON.parse(str);
+    // page indexes/ids start from 1 instead of 0
+    const idx = obj.sightings.length;
+    response.redirect(`/sighting/${idx}`);
   });
 });
 
