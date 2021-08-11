@@ -77,12 +77,13 @@ app.put('/sighting/:index/edit', (request, response) => {
     response.status(406).send('Your sighting ID has to be a number!');
   }
   read(FILENAME, (err, data) => {
-    if (request.params.index > data.sightings.length || request.params.index < 1) {
+    // page indexes/ids start from 1 instead of 0
+    if (idxParam > data.sightings.length || idxParam < 1) {
       response.status(404).send('Sorry, we cannot find that!');
     } else {
       const textLength = request.body.text.length;
       // page indexes/ids start from 1 instead of 0
-      data.sightings[request.params.index - 1] = {
+      data.sightings[idxParam - 1] = {
         ...request.body,
         summary: request.body.text
           .substring(0, SUMMARY_CHAR_LIMIT)
@@ -94,7 +95,31 @@ app.put('/sighting/:index/edit', (request, response) => {
         if (error) {
           response.status(500).send('DB write error. We cannot edit this sighting. Please try again!');
         }
-        response.redirect(`/sighting/${request.params.index}`);
+        response.redirect(`/sighting/${idxParam}`);
+      });
+    }
+  });
+});
+
+app.delete('/sighting/:index/delete', (request, response) => {
+  const idxParam = request.params.index;
+  if (Number.isNaN(Number(idxParam))) {
+    response.status(406).send('Your sighting ID has to be a number!');
+  }
+  // Remove element from DB at given index
+  read(FILENAME, (err, data) => {
+    // page indexes/ids start from 1 instead of 0
+    if (request.params.index > data.sightings.length || request.params.index < 1) {
+      response.status(404).send('Sorry, we cannot find that!');
+    } else {
+      // page indexes/ids start from 1 instead of 0
+      data.sightings.splice(idxParam - 1, 1);
+      write(FILENAME, data, (error) => {
+        if (!error) {
+          response.redirect('/');
+        } else {
+          response.status(500).send('DB write error. We cannot delete this sighting. Please try again!');
+        }
       });
     }
   });
