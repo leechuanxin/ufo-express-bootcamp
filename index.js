@@ -33,6 +33,20 @@ app.get('/sighting', (request, response) => {
   response.render('newsighting');
 });
 
+app.get('/shapes', (request, response) => {
+  read(FILENAME, (err, data) => {
+    const { sightings } = data;
+    const shapeTally = {};
+    sightings.forEach((sighting) => {
+      if (!shapeTally[sighting.shape]) {
+        shapeTally[sighting.shape] = '';
+      }
+    });
+    const obj = { shapes: Object.keys(shapeTally) };
+    response.render('shapes', obj);
+  });
+});
+
 app.get('/sighting/:index', (request, response) => {
   read(FILENAME, (err, data) => {
     // page indexes/ids start from 1 instead of 0
