@@ -47,6 +47,42 @@ app.get('/shapes', (request, response) => {
   });
 });
 
+app.get('/shapes/:shape', (request, response) => {
+  read(FILENAME, (err, data) => {
+    // clean up shapes data from JSON
+    const { sightings } = data;
+    const shapeTally = {};
+    sightings.forEach((sighting) => {
+      // shapes from data.json to be lower-cased,
+      // dash-separated
+      const shape = sighting.shape
+        .trim()
+        .toLowerCase()
+        .replace(' ', '-');
+      if (!shapeTally[shape]) {
+        shapeTally[shape] = '';
+      }
+    });
+    const shapes = Object.keys(shapeTally);
+    const shapeParam = request.params.shape
+      .trim()
+      .toLowerCase()
+      .replace('%20', '-');
+    if (shapes.indexOf(shapeParam) < 0) {
+      response.status(404).send('Sorry, we cannot find that shape!');
+    } else {
+      // retrieve all matching shapes
+      const obj = {
+        sightings: sightings.filter((sighting) => shapeParam === sighting.shape
+          .trim()
+          .toLowerCase()
+          .replace(' ', '-')),
+      };
+      response.render('shape', obj);
+    }
+  });
+});
+
 app.get('/sighting/:index', (request, response) => {
   read(FILENAME, (err, data) => {
     // page indexes/ids start from 1 instead of 0
