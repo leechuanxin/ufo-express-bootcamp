@@ -84,13 +84,14 @@ export const handleSighting = (request, response) => {
     } else {
       // page indexes/ids start from 1 instead of 0
       const sighting = data.sightings[request.params.index - 1];
-      const sightingWithIndex = {
+      const sightingFmt = {
         ...sighting,
         idx: request.params.index,
         createdFmt: moment(sighting.created).format('MMMM DD, YYYY'),
         lastUpdatedFmt: moment(sighting.lastUpdated).format('MMMM DD, YYYY'),
+        dateTimeFmt: moment(sighting.lastUpdated).format('MMMM DD, YYYY hh:mmA'),
       };
-      response.render('sighting', sightingWithIndex);
+      response.render('sighting', sightingFmt);
     }
   });
 };
@@ -107,11 +108,11 @@ export const handleSightingEdit = (request, response) => {
     } else {
       // page indexes/ids start from 1 instead of 0
       const sighting = data.sightings[request.params.index - 1];
-      const sightingWithIndex = {
+      const sightingFmt = {
         ...sighting,
         idx: request.params.index,
       };
-      response.render('editsighting', sightingWithIndex);
+      response.render('editsighting', sightingFmt);
     }
   });
 };
