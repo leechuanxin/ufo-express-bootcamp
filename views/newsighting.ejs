@@ -43,7 +43,7 @@
         <div class="col-12">
           <form action="/sighting" method="POST">
             <div class="row">
-              <h4 class="mb-3">Location</h4>
+              <h4 class="mb-3">Location & Time</h4>
               <div class="col-md-6 mb-3">
                 <label for="citySpotted">
                   <strong>City</strong>
@@ -75,6 +75,23 @@
                   required
                 />
                 <div class="invalid-feedback">Valid state is required.</div>
+              </div>
+              <div class="col-12 mb-3">
+                <label for="dateSpotted">
+                  <strong>Date & Time</strong>
+                  <small class="fst-italic"> (when the UFO is sighted) </small>
+                </label>
+                <input
+                  type="datetime-local"
+                  class="form-control"
+                  id="dateSpotted"
+                  name="date_time"
+                  value=""
+                  required
+                />
+                <div class="invalid-feedback">
+                  Valid date and time are required.
+                </div>
               </div>
             </div>
             <hr class="mb-3" />
