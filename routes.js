@@ -1,3 +1,4 @@
+import moment from 'moment';
 import { add, read, write } from './jsonFileStorage.js';
 import standardizeParam from './util.js';
 
@@ -86,6 +87,8 @@ export const handleSighting = (request, response) => {
       const sightingWithIndex = {
         ...sighting,
         idx: request.params.index,
+        createdFmt: moment(sighting.created).format('MMMM DD, YYYY'),
+        lastUpdatedFmt: moment(sighting.lastUpdated).format('MMMM DD, YYYY'),
       };
       response.render('sighting', sightingWithIndex);
     }
@@ -132,6 +135,8 @@ export const handleSightingEditPut = (request, response) => {
           .concat(
             (textLength > SUMMARY_CHAR_LIMIT) ? '...' : '',
           ),
+        created: data.sightings[idxParam - 1].created || new Date(),
+        lastUpdated: new Date(),
       };
       write(FILENAME, data, (error) => {
         if (error) {
@@ -176,6 +181,8 @@ export const handleSightingCreate = (request, response) => {
       .concat(
         (textLength > SUMMARY_CHAR_LIMIT) ? '...' : '',
       ),
+    created: new Date(),
+    lastUpdated: new Date(),
   };
   // Add new recipe data in request.body to recipes array in data.json.
   add(FILENAME, 'sightings', sighting, (err, str) => {

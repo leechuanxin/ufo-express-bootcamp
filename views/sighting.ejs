@@ -35,6 +35,18 @@
     <div class="container pt-5">
       <div class="row">
         <div class="col-12">
+          <p class="text-end">
+            <small class="fst-italic">Created: <%= createdFmt %></small>
+          </p>
+          <p class="text-end">
+            <small class="fst-italic"
+              >Last Updated: <%= lastUpdatedFmt %></small
+            >
+          </p>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-12">
           <form action="/sighting" method="POST">
             <div class="row">
               <h4 class="mb-3">Location</h4>
