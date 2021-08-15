@@ -21,7 +21,10 @@ export const handleIndex = (request, response) => {
 };
 
 export const handleNewSighting = (request, response) => {
-  response.render('newsighting');
+  const obj = {
+    timeNow: moment().format('YYYY-MM-DDTHH:mm'),
+  };
+  response.render('newsighting', obj);
 };
 
 export const handleShapes = (request, response) => {
@@ -111,6 +114,7 @@ export const handleSightingEdit = (request, response) => {
       const sightingFmt = {
         ...sighting,
         idx: request.params.index,
+        timeNow: moment().format('YYYY-MM-DDTHH:mm'),
       };
       response.render('editsighting', sightingFmt);
     }
