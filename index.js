@@ -1,11 +1,9 @@
 import express from 'express';
 import methodOverride from 'method-override';
-import { add, read, write } from './jsonFileStorage.js';
+import * as routes from './routes.js';
 
 const app = express();
 const PORT = process.argv[2];
-const FILENAME = './data.json';
-const SUMMARY_CHAR_LIMIT = 100;
 
 // Set view engine
 app.set('view engine', 'ejs');
@@ -14,189 +12,13 @@ app.use(methodOverride('_method'));
 // To receive POST request body data in request.body
 app.use(express.urlencoded({ extended: false }));
 
-app.get('/', (request, response) => {
-  read(FILENAME, (err, data) => {
-    const { sightings } = data;
-    const sightingsIdx = sightings
-      .map(
-        // page indexes/ids start from 1 instead of 0
-        (sighting, index) => ({ ...sighting, idx: index + 1 }),
-      );
-    const sightingsIdxObj = {
-      sightings: sightingsIdx,
-    };
-    response.render('index', sightingsIdxObj);
-  });
-});
-
-app.get('/sighting', (request, response) => {
-  response.render('newsighting');
-});
-
-app.get('/shapes', (request, response) => {
-  read(FILENAME, (err, data) => {
-    const { sightings } = data;
-    const shapeTally = {};
-    sightings.forEach((sighting) => {
-      if (!shapeTally[sighting.shape]) {
-        shapeTally[sighting.shape] = '';
-      }
-    });
-    const obj = { shapes: Object.keys(shapeTally) };
-    response.render('shapes', obj);
-  });
-});
-
-app.get('/shapes/:shape', (request, response) => {
-  read(FILENAME, (err, data) => {
-    // clean up shapes data from JSON
-    const { sightings } = data;
-    const shapeTally = {};
-    sightings.forEach((sighting) => {
-      // shapes from data.json to be lower-cased,
-      // dash-separated
-      const shape = sighting.shape
-        .trim()
-        .toLowerCase()
-        .replace(' ', '-');
-      if (!shapeTally[shape]) {
-        shapeTally[shape] = '';
-      }
-    });
-    const shapes = Object.keys(shapeTally);
-    const shapeParam = request.params.shape
-      .trim()
-      .toLowerCase()
-      .replace('%20', '-');
-    if (shapes.indexOf(shapeParam) < 0) {
-      response.status(404).send('Sorry, we cannot find that shape!');
-    } else {
-      // retrieve all matching shapes
-      const obj = {
-        sightings: sightings.filter((sighting) => shapeParam === sighting.shape
-          .trim()
-          .toLowerCase()
-          .replace(' ', '-')),
-      };
-      response.render('shape', obj);
-    }
-  });
-});
-
-app.get('/sighting/:index', (request, response) => {
-  read(FILENAME, (err, data) => {
-    // page indexes/ids start from 1 instead of 0
-    if (request.params.index > data.sightings.length || request.params.index < 1) {
-      response.status(404).send('Sorry, we cannot find that!');
-    } else {
-      // page indexes/ids start from 1 instead of 0
-      const sighting = data.sightings[request.params.index - 1];
-      const sightingWithIndex = {
-        ...sighting,
-        idx: request.params.index,
-      };
-      response.render('sighting', sightingWithIndex);
-    }
-  });
-});
-
-app.get('/sighting/:index/edit', (request, response) => {
-  const idxParam = request.params.index;
-  if (Number.isNaN(Number(idxParam))) {
-    response.status(406).send('Your sighting ID has to be a number!');
-  }
-  read(FILENAME, (err, data) => {
-    // page indexes/ids start from 1 instead of 0
-    if (request.params.index > data.sightings.length || request.params.index < 1) {
-      response.status(404).send('Sorry, we cannot find that!');
-    } else {
-      // page indexes/ids start from 1 instead of 0
-      const sighting = data.sightings[request.params.index - 1];
-      const sightingWithIndex = {
-        ...sighting,
-        idx: request.params.index,
-      };
-      response.render('editsighting', sightingWithIndex);
-    }
-  });
-});
-
-app.put('/sighting/:index/edit', (request, response) => {
-  const idxParam = request.params.index;
-  if (Number.isNaN(Number(idxParam))) {
-    response.status(406).send('Your sighting ID has to be a number!');
-  }
-  read(FILENAME, (err, data) => {
-    // page indexes/ids start from 1 instead of 0
-    if (idxParam > data.sightings.length || idxParam < 1) {
-      response.status(404).send('Sorry, we cannot find that!');
-    } else {
-      const textLength = request.body.text.length;
-      // page indexes/ids start from 1 instead of 0
-      data.sightings[idxParam - 1] = {
-        ...request.body,
-        summary: request.body.text
-          .substring(0, SUMMARY_CHAR_LIMIT)
-          .concat(
-            (textLength > SUMMARY_CHAR_LIMIT) ? '...' : '',
-          ),
-      };
-      write(FILENAME, data, (error) => {
-        if (error) {
-          response.status(500).send('DB write error. We cannot edit this sighting. Please try again!');
-        }
-        response.redirect(`/sighting/${idxParam}`);
-      });
-    }
-  });
-});
-
-app.delete('/sighting/:index/delete', (request, response) => {
-  const idxParam = request.params.index;
-  if (Number.isNaN(Number(idxParam))) {
-    response.status(406).send('Your sighting ID has to be a number!');
-  }
-  // Remove element from DB at given index
-  read(FILENAME, (err, data) => {
-    // page indexes/ids start from 1 instead of 0
-    if (request.params.index > data.sightings.length || request.params.index < 1) {
-      response.status(404).send('Sorry, we cannot find that!');
-    } else {
-      // page indexes/ids start from 1 instead of 0
-      data.sightings.splice(idxParam - 1, 1);
-      write(FILENAME, data, (error) => {
-        if (!error) {
-          response.redirect('/');
-        } else {
-          response.status(500).send('DB write error. We cannot delete this sighting. Please try again!');
-        }
-      });
-    }
-  });
-});
-
-app.post('/sighting', (request, response) => {
-  const textLength = request.body.text.length;
-  const sighting = {
-    ...request.body,
-    summary: request.body.text
-      .substring(0, SUMMARY_CHAR_LIMIT)
-      .concat(
-        (textLength > SUMMARY_CHAR_LIMIT) ? '...' : '',
-      ),
-  };
-  // Add new recipe data in request.body to recipes array in data.json.
-  add(FILENAME, 'sightings', sighting, (err, str) => {
-    if (err) {
-      response.status(500).send('DB write error.');
-      return;
-    }
-
-    const obj = JSON.parse(str);
-    // page indexes/ids start from 1 instead of 0
-    const idx = obj.sightings.length;
-    response.redirect(`/sighting/${idx}`);
-  });
-});
-
+app.get('/', routes.handleIndex);
+app.get('/sighting', routes.handleNewSighting);
+app.get('/shapes', routes.handleShapes);
+app.get('/shapes/:shape', routes.handleShape);
+app.get('/sighting/:index', routes.handleSighting);
+app.get('/sighting/:index/edit', routes.handleSightingEdit);
+app.put('/sighting/:index/edit', routes.handleSightingEditPut);
+app.delete('/sighting/:index/delete', routes.handleSightingDelete);
+app.post('/sighting', routes.handleSightingCreate);
 app.listen(PORT);
