@@ -76,6 +76,23 @@
                 />
                 <div class="invalid-feedback">Valid state is required.</div>
               </div>
+              <div class="col-12 mb-3">
+                <label for="dateSpotted">
+                  <strong>Date & Time</strong>
+                  <small class="fst-italic"> (when the UFO is sighted) </small>
+                </label>
+                <input
+                  type="datetime-local"
+                  class="form-control"
+                  id="dateSpotted"
+                  name="date_time"
+                  value="<%= date_time %>"
+                  required
+                />
+                <div class="invalid-feedback">
+                  Valid date and time are required.
+                </div>
+              </div>
             </div>
             <hr class="mb-3" />
             <div class="row">
