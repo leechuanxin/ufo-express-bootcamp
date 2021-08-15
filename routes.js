@@ -1,4 +1,5 @@
 import { add, read, write } from './jsonFileStorage.js';
+import standardizeParam from './util.js';
 
 const FILENAME = './data.json';
 const SUMMARY_CHAR_LIMIT = 100;
@@ -44,28 +45,19 @@ export const handleShape = (request, response) => {
     sightings.forEach((sighting) => {
       // shapes from data.json to be lower-cased,
       // dash-separated
-      const shape = sighting.shape
-        .trim()
-        .toLowerCase()
-        .replace(' ', '-');
+      const shape = standardizeParam(sighting.shape);
       if (!shapeTally[shape]) {
         shapeTally[shape] = '';
       }
     });
     const shapes = Object.keys(shapeTally);
-    const shapeParam = request.params.shape
-      .trim()
-      .toLowerCase()
-      .replace('%20', '-');
+    const shapeParam = standardizeParam(request.params.shape);
     if (shapes.indexOf(shapeParam) < 0) {
       response.status(404).send('Sorry, we cannot find that shape!');
     } else {
       // retrieve all matching shapes
       const obj = {
-        sightings: sightings.filter((sighting) => shapeParam === sighting.shape
-          .trim()
-          .toLowerCase()
-          .replace(' ', '-')),
+        sightings: sightings.filter((sighting) => shapeParam === standardizeParam(sighting.shape)),
       };
       response.render('shape', obj);
     }
