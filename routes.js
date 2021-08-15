@@ -89,7 +89,7 @@ export const handleSighting = (request, response) => {
         idx: request.params.index,
         createdFmt: moment(sighting.created).format('MMMM DD, YYYY'),
         lastUpdatedFmt: moment(sighting.lastUpdated).format('MMMM DD, YYYY'),
-        dateTimeFmt: moment(sighting.lastUpdated).format('MMMM DD, YYYY hh:mmA'),
+        dateTimeFmt: moment(sighting.date_time).format('MMMM DD, YYYY hh:mmA'),
       };
       response.render('sighting', sightingFmt);
     }
