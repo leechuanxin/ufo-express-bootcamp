@@ -1,5 +1,6 @@
 import express from 'express';
 import methodOverride from 'method-override';
+import cookieParser from 'cookie-parser';
 import * as routes from './routes.js';
 
 const app = express();
@@ -11,6 +12,8 @@ app.set('view engine', 'ejs');
 app.use(methodOverride('_method'));
 // To receive POST request body data in request.body
 app.use(express.urlencoded({ extended: false }));
+// To parse cookie string value in the header into a JavaScript Object
+app.use(cookieParser());
 
 app.get('/', routes.handleIndex);
 app.get('/sighting', routes.handleNewSighting);
