@@ -2,11 +2,12 @@
 const standardizeParam = (str) => str
   .trim()
   .toLowerCase()
-  .split('%20').join(' ')
+  .split('%20')
+  .join('')
   .split(' ')
-  .join('-')
+  .join('')
   .split('_')
-  .join('-')
+  .join('')
   .split('-')
   .join('');
 
