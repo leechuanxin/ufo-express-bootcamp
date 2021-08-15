@@ -46,7 +46,11 @@ export const handleShape = (request, response) => {
     // clean up shapes data from JSON
     const { sightings } = data;
     const shapeTally = {};
-    sightings.forEach((sighting) => {
+    const sightingsIndexed = sightings.map((sighting, index) => ({
+      ...sighting,
+      idx: index,
+    }));
+    sightingsIndexed.forEach((sighting) => {
       // shapes from data.json to be lower-cased, no spaces
       const shape = standardizeParam(sighting.shape);
       if (!shapeTally[shape]) {
@@ -60,8 +64,11 @@ export const handleShape = (request, response) => {
       response.status(404).send('Sorry, we cannot find that shape!');
     } else {
       // retrieve all matching shapes
+      const matchingSightings = sightingsIndexed
+        .filter((sighting) => shapeParam === standardizeParam(sighting.shape));
+
       const obj = {
-        sightings: sightings.filter((sighting) => shapeParam === standardizeParam(sighting.shape)),
+        sightings: matchingSightings,
       };
       response.render('shape', obj);
     }

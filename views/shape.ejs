@@ -39,7 +39,8 @@
                 <%= index + 1 %>
               </th>
               <td class="text-center align-middle">
-                <a href="/sighting/<%= sighting.idx %>">
+                <%# sighting indexes count from 1, not 0 %>
+                <a href="/sighting/<%= sighting.idx + 1 %>">
                   <%= sighting.summary %>
                 </a>
               </td>
