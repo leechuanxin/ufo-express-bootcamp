@@ -28,7 +28,11 @@ export const handleShapes = (request, response) => {
     const { sightings } = data;
     const shapeTally = {};
     sightings.forEach((sighting) => {
-      if (!shapeTally[sighting.shape]) {
+      // get standardized str of shape from data.json
+      const standardizedShape = standardizeParam(sighting.shape);
+      // get current list of standardized shapes saved
+      const standardizedShapesArr = Object.keys(shapeTally).map((shape) => standardizeParam(shape));
+      if (standardizedShapesArr.indexOf(standardizedShape) < 0) {
         shapeTally[sighting.shape] = '';
       }
     });
@@ -43,14 +47,14 @@ export const handleShape = (request, response) => {
     const { sightings } = data;
     const shapeTally = {};
     sightings.forEach((sighting) => {
-      // shapes from data.json to be lower-cased,
-      // dash-separated
+      // shapes from data.json to be lower-cased, no spaces
       const shape = standardizeParam(sighting.shape);
       if (!shapeTally[shape]) {
         shapeTally[shape] = '';
       }
     });
     const shapes = Object.keys(shapeTally);
+    // shape from param to be lower-cased, no spaces
     const shapeParam = standardizeParam(request.params.shape);
     if (shapes.indexOf(shapeParam) < 0) {
       response.status(404).send('Sorry, we cannot find that shape!');
