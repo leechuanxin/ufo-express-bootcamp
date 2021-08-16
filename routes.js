@@ -4,7 +4,6 @@ import * as util from './util.js';
 import validateSighting from './validation.js';
 
 const FILENAME = './data.json';
-const SUMMARY_CHAR_LIMIT = 100;
 
 export const handleIndex = (request, response) => {
   read(FILENAME, (err, data) => {
@@ -136,15 +135,10 @@ export const handleSightingEditPut = (request, response) => {
         };
         response.render('editsighting', { sighting: sightingFmt });
       } else {
-        const textLength = sighting.text.length;
         // page indexes/ids start from 1 instead of 0
         data.sightings[idxParam - 1] = {
           ...sighting,
-          summary: sighting.text
-            .substring(0, SUMMARY_CHAR_LIMIT)
-            .concat(
-              (textLength > SUMMARY_CHAR_LIMIT) ? '...' : '',
-            ),
+          summary: util.getTextSummary(sighting.text),
           created: data.sightings[idxParam - 1].created || new Date(),
           lastUpdated: new Date(),
         };
@@ -199,14 +193,9 @@ export const handleSightingCreate = (request, response) => {
       sighting: validationObj,
     });
   } else {
-    const textLength = sighting.text.length;
     const sightingFmt = {
       ...sighting,
-      summary: sighting.text
-        .substring(0, SUMMARY_CHAR_LIMIT)
-        .concat(
-          (textLength > SUMMARY_CHAR_LIMIT) ? '...' : '',
-        ),
+      summary: util.getTextSummary(sighting.text),
       created: new Date(),
       lastUpdated: new Date(),
     };

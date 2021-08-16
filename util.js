@@ -1,5 +1,7 @@
 import moment from 'moment';
 
+const SUMMARY_CHAR_LIMIT = 100;
+
 // replace all spaces, dashes and underscores
 export const standardizeParam = (str) => str
   .trim()
@@ -49,3 +51,9 @@ export const getFromNowTimeFmt = (time) => {
 };
 
 export const getInvalidFormRequests = (obj) => Object.keys(obj).filter((key) => key.indexOf('invalid') >= 0);
+
+export const getTextSummary = (text) => text
+  .substring(0, SUMMARY_CHAR_LIMIT)
+  .concat(
+    (text.length > SUMMARY_CHAR_LIMIT) ? '...' : '',
+  );
