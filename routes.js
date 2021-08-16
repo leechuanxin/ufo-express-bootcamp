@@ -90,11 +90,29 @@ export const handleSighting = (request, response) => {
     } else {
       // page indexes/ids start from 1 instead of 0
       const sighting = data.sightings[request.params.index - 1];
+      const createdTime = moment(sighting.created);
+      const lastUpdatedTime = moment(sighting.lastUpdated);
+      const weekAgo = moment().subtract(7, 'days');
+      let createdFmt;
+      let lastUpdatedFmt;
+
+      if (createdTime.isAfter(weekAgo)) {
+        createdFmt = createdTime.fromNow();
+      } else {
+        createdFmt = createdTime.format('MMMM DD, YYYY');
+      }
+
+      if (lastUpdatedTime.isAfter(weekAgo)) {
+        lastUpdatedFmt = lastUpdatedTime.fromNow();
+      } else {
+        lastUpdatedFmt = lastUpdatedTime.format('MMMM DD, YYYY');
+      }
+
       const sightingFmt = {
         ...sighting,
         idx: request.params.index,
-        createdFmt: moment(sighting.created).format('MMMM DD, YYYY'),
-        lastUpdatedFmt: moment(sighting.lastUpdated).format('MMMM DD, YYYY'),
+        createdFmt,
+        lastUpdatedFmt,
         dateTimeFmt: moment(sighting.date_time).format('dddd, MMMM Do, YYYY'),
       };
       response.render('sighting', sightingFmt);
