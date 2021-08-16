@@ -51,6 +51,7 @@ export const handleShape = (request, response) => {
         .filter((sighting) => shapeParam === util.standardizeParam(sighting.shape));
 
       const obj = {
+        shape: matchingSightings[0].shape,
         sightings: matchingSightings,
       };
       response.render('shape', obj);

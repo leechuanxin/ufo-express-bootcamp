@@ -1,214 +1,184 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <title>Report a UFO Sighting!</title>
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-      integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We"
-      crossorigin="anonymous"
-    />
-
-    <!-- Required meta tags -->
-    <meta charset="utf-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1, shrink-to-fit=no"
-    />
-  </head>
-  <body class="bg-light pt-5">
-    <nav class="navbar navbar-dark bg-dark fixed-top">
-      <!-- Navbar content -->
-      <div class="container-fluid">
-        <a class="navbar-brand" href="#">Report a UFO Sighting!</a>
-      </div>
-    </nav>
-    <div class="container pt-5">
-      <div class="row">
-        <div class="col-12">
-          <form action="/sighting" method="POST">
-            <div class="row">
-              <h4 class="mb-3">Location & Time</h4>
-              <div class="col-md-6 mb-3">
-                <label for="citySpotted">
-                  <strong>City</strong>
-                  <small class="fst-italic"> (where the UFO is sighted) </small>
-                </label>
-                <input
-                  type="text"
-                  class="
-                    form-control
-                    <%
-                    if
-                    (sighting.city_invalid)
-                    {%>
-                    is-invalid
-                    <%
-                    }
-                    %>
-                  "
-                  id="citySpotted"
-                  name="city"
-                  placeholder="e.g. Marin County"
-                  value="<%= sighting.city %>"
-                />
-                <div class="invalid-feedback"><%= sighting.city_invalid %></div>
-              </div>
-              <div class="col-md-6 mb-3">
-                <label for="stateSpotted">
-                  <strong>State</strong>
-                  <small class="fst-italic"> (where the UFO is sighted) </small>
-                </label>
-                <input
-                  type="text"
-                  class="
-                    form-control
-                    <%
-                    if
-                    (sighting.state_invalid)
-                    {%>
-                    is-invalid
-                    <%
-                    }
-                    %>
-                  "
-                  id="stateSpotted"
-                  name="state"
-                  placeholder="e.g. CA"
-                  value="<%= sighting.state %>"
-                />
-                <div class="invalid-feedback">
-                  <%= sighting.state_invalid %>
-                </div>
-              </div>
-              <div class="col-12 mb-3">
-                <label for="dateSpotted">
-                  <strong>Date & Time</strong>
-                  <small class="fst-italic"> (when the UFO is sighted) </small>
-                </label>
-                <input
-                  type="datetime-local"
-                  class="
-                    form-control
-                    <%
-                    if
-                    (sighting.date_time_invalid)
-                    {%>
-                    is-invalid
-                    <%
-                    }
-                    %>
-                  "
-                  id="dateSpotted"
-                  name="date_time"
-                  value="<%= sighting.date_time %>"
-                  max="<%= sighting.timeNow %>"
-                />
-                <div class="invalid-feedback">
-                  <%= sighting.date_time_invalid %>
-                </div>
-              </div>
+<%- include('headers/html-header', {title: 'Report a UFO Sighting!'}); -%>
+<nav class="navbar navbar-dark bg-dark fixed-top">
+  <!-- Navbar content -->
+  <div class="container-fluid">
+    <a class="navbar-brand" href="#">Report a UFO Sighting!</a>
+  </div>
+</nav>
+<div class="container pt-5">
+  <div class="row">
+    <div class="col-12">
+      <form action="/sighting" method="POST">
+        <div class="row">
+          <h4 class="mb-3">Location & Time</h4>
+          <div class="col-md-6 mb-3">
+            <label for="citySpotted">
+              <strong>City</strong>
+              <small class="fst-italic"> (where the UFO is sighted) </small>
+            </label>
+            <input
+              type="text"
+              class="
+                form-control
+                <%
+                if
+                (sighting.city_invalid)
+                {%>
+                is-invalid
+                <%
+                }
+                %>
+              "
+              id="citySpotted"
+              name="city"
+              placeholder="e.g. Marin County"
+              value="<%= sighting.city %>"
+            />
+            <div class="invalid-feedback"><%= sighting.city_invalid %></div>
+          </div>
+          <div class="col-md-6 mb-3">
+            <label for="stateSpotted">
+              <strong>State</strong>
+              <small class="fst-italic"> (where the UFO is sighted) </small>
+            </label>
+            <input
+              type="text"
+              class="
+                form-control
+                <%
+                if
+                (sighting.state_invalid)
+                {%>
+                is-invalid
+                <%
+                }
+                %>
+              "
+              id="stateSpotted"
+              name="state"
+              placeholder="e.g. CA"
+              value="<%= sighting.state %>"
+            />
+            <div class="invalid-feedback"><%= sighting.state_invalid %></div>
+          </div>
+          <div class="col-12 mb-3">
+            <label for="dateSpotted">
+              <strong>Date & Time</strong>
+              <small class="fst-italic"> (when the UFO is sighted) </small>
+            </label>
+            <input
+              type="datetime-local"
+              class="
+                form-control
+                <%
+                if
+                (sighting.date_time_invalid)
+                {%>
+                is-invalid
+                <%
+                }
+                %>
+              "
+              id="dateSpotted"
+              name="date_time"
+              value="<%= sighting.date_time %>"
+              max="<%= sighting.timeNow %>"
+            />
+            <div class="invalid-feedback">
+              <%= sighting.date_time_invalid %>
             </div>
-            <hr class="mb-3" />
-            <div class="row">
-              <h4 class="mb-3">UFO Sighting Specifics</h4>
-              <div class="col-md-6 mb-3">
-                <label for="ufoShape">
-                  <strong>Shape</strong>
-                  <small class="fst-italic"> (of the UFO) </small>
-                </label>
-                <input
-                  type="text"
-                  class="
-                    form-control
-                    <%
-                    if
-                    (sighting.shape_invalid)
-                    {%>
-                    is-invalid
-                    <%
-                    }
-                    %>
-                  "
-                  id="ufoShape"
-                  name="shape"
-                  placeholder="e.g. Sphere"
-                  value="<%= sighting.shape %>"
-                />
-                <div class="invalid-feedback">
-                  <%= sighting.shape_invalid %>
-                </div>
-              </div>
-              <div class="col-md-6 mb-3">
-                <label for="ufoDuration">
-                  <strong>Duration</strong>
-                  <small class="fst-italic"> (of the UFO appearance) </small>
-                </label>
-                <input
-                  type="text"
-                  class="
-                    form-control
-                    <%
-                    if
-                    (sighting.duration_invalid)
-                    {%>
-                    is-invalid
-                    <%
-                    }
-                    %>
-                  "
-                  id="ufoDuration"
-                  name="duration"
-                  placeholder="e.g. 3 minutes"
-                  value="<%= sighting.duration %>"
-                />
-                <div class="invalid-feedback">
-                  <%= sighting.duration_invalid %>
-                </div>
-              </div>
-            </div>
-            <hr class="mb-3" />
-            <div class="row">
-              <div class="col-12 mb-3">
-                <h4 class="mb-3">Other Information</h4>
-                <label for="ufoStory">
-                  <strong>Tell us the story of your UFO sighting!</strong>
-                </label>
-                <textarea
-                  class="
-                    form-control
-                    <%
-                    if
-                    (sighting.text_invalid)
-                    {%>
-                    is-invalid
-                    <%
-                    }
-                    %>
-                  "
-                  id="ufoStory"
-                  name="text"
-                  rows="5"
-                  placeholder="eg. Witnessed an orange, slow moving light. Was looking out my window and saw a orange colored, non blinking light floating across the night sky. Woke up my daughters to confirm what I was seeing. The object did not blink, was definitely not a helicopter. Very bright orange and moved slowly for about 2 minutes, disappeared behind the trees and did not see it again. Never seen anything like this in my life."
-                >
-<%= sighting.text %></textarea
-                >
-                <div class="invalid-feedback"><%= sighting.text_invalid %></div>
-              </div>
-            </div>
-            <hr class="mb-4" />
-            <button class="btn btn-primary btn-lg btn-block" type="submit">
-              Submit new sighting
-            </button>
-          </form>
+          </div>
         </div>
-      </div>
+        <hr class="mb-3" />
+        <div class="row">
+          <h4 class="mb-3">UFO Sighting Specifics</h4>
+          <div class="col-md-6 mb-3">
+            <label for="ufoShape">
+              <strong>Shape</strong>
+              <small class="fst-italic"> (of the UFO) </small>
+            </label>
+            <input
+              type="text"
+              class="
+                form-control
+                <%
+                if
+                (sighting.shape_invalid)
+                {%>
+                is-invalid
+                <%
+                }
+                %>
+              "
+              id="ufoShape"
+              name="shape"
+              placeholder="e.g. Sphere"
+              value="<%= sighting.shape %>"
+            />
+            <div class="invalid-feedback"><%= sighting.shape_invalid %></div>
+          </div>
+          <div class="col-md-6 mb-3">
+            <label for="ufoDuration">
+              <strong>Duration</strong>
+              <small class="fst-italic"> (of the UFO appearance) </small>
+            </label>
+            <input
+              type="text"
+              class="
+                form-control
+                <%
+                if
+                (sighting.duration_invalid)
+                {%>
+                is-invalid
+                <%
+                }
+                %>
+              "
+              id="ufoDuration"
+              name="duration"
+              placeholder="e.g. 3 minutes"
+              value="<%= sighting.duration %>"
+            />
+            <div class="invalid-feedback"><%= sighting.duration_invalid %></div>
+          </div>
+        </div>
+        <hr class="mb-3" />
+        <div class="row">
+          <div class="col-12 mb-3">
+            <h4 class="mb-3">Other Information</h4>
+            <label for="ufoStory">
+              <strong>Tell us the story of your UFO sighting!</strong>
+            </label>
+            <textarea
+              class="
+                form-control
+                <%
+                if
+                (sighting.text_invalid)
+                {%>
+                is-invalid
+                <%
+                }
+                %>
+              "
+              id="ufoStory"
+              name="text"
+              rows="5"
+              placeholder="eg. Witnessed an orange, slow moving light. Was looking out my window and saw a orange colored, non blinking light floating across the night sky. Woke up my daughters to confirm what I was seeing. The object did not blink, was definitely not a helicopter. Very bright orange and moved slowly for about 2 minutes, disappeared behind the trees and did not see it again. Never seen anything like this in my life."
+            >
+<%= sighting.text %></textarea
+            >
+            <div class="invalid-feedback"><%= sighting.text_invalid %></div>
+          </div>
+        </div>
+        <hr class="mb-4" />
+        <button class="btn btn-primary btn-lg btn-block" type="submit">
+          Submit new sighting
+        </button>
+      </form>
     </div>
+  </div>
+</div>
 
-    <script
-      src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"
-      integrity="sha384-U1DAWAznBHeqEIlVSCgzq+c9gqGAJn5c/t99JyeKa9xxaYpSvHU5awsuZVVFIhvj"
-      crossorigin="anonymous"
-    ></script>
-  </body>
-</html>
+<%- include('footers/html-footer'); -%>
