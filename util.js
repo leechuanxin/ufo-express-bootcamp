@@ -1,5 +1,7 @@
+import moment from 'moment';
+
 // replace all spaces, dashes and underscores
-const standardizeParam = (str) => str
+export const standardizeParam = (str) => str
   .trim()
   .toLowerCase()
   .split('%20')
@@ -11,4 +13,39 @@ const standardizeParam = (str) => str
   .split('-')
   .join('');
 
-export default standardizeParam;
+export const getShapesList = (sightings) => {
+  const shapeTally = {};
+  sightings.forEach((sighting) => {
+    // shapes from data.json to be lower-cased, no spaces
+    const shape = standardizeParam(sighting.shape);
+    if (!shapeTally[shape]) {
+      shapeTally[shape] = '';
+    }
+  });
+  return Object.keys(shapeTally);
+};
+
+export const getUniqueShapesList = (sightings) => {
+  const shapeTally = {};
+  sightings.forEach((sighting) => {
+    // get standardized str of shape from data.json
+    const standardizedShape = standardizeParam(sighting.shape);
+    // get list of unique shapes based on said standardisation
+    const standardizedShapesArr = Object.keys(shapeTally).map((shape) => standardizeParam(shape));
+    if (standardizedShapesArr.indexOf(standardizedShape) < 0) {
+      shapeTally[sighting.shape] = '';
+    }
+  });
+  return Object.keys(shapeTally);
+};
+
+export const getFromNowTimeFmt = (time) => {
+  const momentTime = moment(time);
+  const weekAgo = moment().subtract(7, 'days');
+  if (momentTime.isAfter(weekAgo)) {
+    return momentTime.fromNow();
+  }
+  return momentTime.format('MMMM DD, YYYY');
+};
+
+export const getInvalidFormRequests = (obj) => Object.keys(obj).filter((key) => key.indexOf('invalid') >= 0);

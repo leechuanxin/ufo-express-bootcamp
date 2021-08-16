@@ -54,18 +54,14 @@ const validateText = (sighting) => {
   return obj;
 };
 
-const validateSighting = (sighting) => {
-  const validationObj = {
-    ...sighting,
-    ...validateCity(sighting),
-    ...validateState(sighting),
-    ...validateDateTime(sighting),
-    ...validateShape(sighting),
-    ...validateDuration(sighting),
-    ...validateText(sighting),
-  };
-
-  return validationObj;
-};
+const validateSighting = (sighting) => ({
+  ...sighting,
+  ...validateCity(sighting),
+  ...validateState(sighting),
+  ...validateDateTime(sighting),
+  ...validateShape(sighting),
+  ...validateDuration(sighting),
+  ...validateText(sighting),
+});
 
 export default validateSighting;

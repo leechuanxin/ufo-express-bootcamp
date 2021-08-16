@@ -1,6 +1,6 @@
 import moment from 'moment';
 import { add, read, write } from './jsonFileStorage.js';
-import standardizeParam from './util.js';
+import * as util from './util.js';
 import validateSighting from './validation.js';
 
 const FILENAME = './data.json';
@@ -9,15 +9,15 @@ const SUMMARY_CHAR_LIMIT = 100;
 export const handleIndex = (request, response) => {
   read(FILENAME, (err, data) => {
     const { sightings } = data;
-    const sightingsIdx = sightings
+    const sightingsFmt = sightings
       .map(
         // page indexes/ids start from 1 instead of 0
         (sighting, index) => ({ ...sighting, idx: index + 1 }),
       );
-    const sightingsIdxObj = {
-      sightings: sightingsIdx,
+    const obj = {
+      sightings: sightingsFmt,
     };
-    response.render('index', sightingsIdxObj);
+    response.render('index', obj);
   });
 };
 
@@ -33,46 +33,30 @@ export const handleNewSighting = (request, response) => {
 export const handleShapes = (request, response) => {
   read(FILENAME, (err, data) => {
     const { sightings } = data;
-    const shapeTally = {};
-    sightings.forEach((sighting) => {
-      // get standardized str of shape from data.json
-      const standardizedShape = standardizeParam(sighting.shape);
-      // get current list of standardized shapes saved
-      const standardizedShapesArr = Object.keys(shapeTally).map((shape) => standardizeParam(shape));
-      if (standardizedShapesArr.indexOf(standardizedShape) < 0) {
-        shapeTally[sighting.shape] = '';
-      }
-    });
-    const obj = { shapes: Object.keys(shapeTally) };
+    const uniqueShapesList = util.getUniqueShapesList(sightings);
+    const obj = { shapes: uniqueShapesList };
     response.render('shapes', obj);
   });
 };
 
 export const handleShape = (request, response) => {
   read(FILENAME, (err, data) => {
-    // clean up shapes data from JSON
+    // clean up shapes data from JSON,
+    // add index to all sightings regardless of shape
     const { sightings } = data;
-    const shapeTally = {};
     const sightingsIndexed = sightings.map((sighting, index) => ({
       ...sighting,
       idx: index,
     }));
-    sightingsIndexed.forEach((sighting) => {
-      // shapes from data.json to be lower-cased, no spaces
-      const shape = standardizeParam(sighting.shape);
-      if (!shapeTally[shape]) {
-        shapeTally[shape] = '';
-      }
-    });
-    const shapes = Object.keys(shapeTally);
+    const shapes = util.getShapesList(sightingsIndexed);
     // shape from param to be lower-cased, no spaces
-    const shapeParam = standardizeParam(request.params.shape);
+    const shapeParam = util.standardizeParam(request.params.shape);
     if (shapes.indexOf(shapeParam) < 0) {
       response.status(404).send('Sorry, we cannot find that shape!');
     } else {
       // retrieve all matching shapes
       const matchingSightings = sightingsIndexed
-        .filter((sighting) => shapeParam === standardizeParam(sighting.shape));
+        .filter((sighting) => shapeParam === util.standardizeParam(sighting.shape));
 
       const obj = {
         sightings: matchingSightings,
@@ -90,23 +74,9 @@ export const handleSighting = (request, response) => {
     } else {
       // page indexes/ids start from 1 instead of 0
       const sighting = data.sightings[request.params.index - 1];
-      const createdTime = moment(sighting.created);
-      const lastUpdatedTime = moment(sighting.lastUpdated);
-      const weekAgo = moment().subtract(7, 'days');
-      let createdFmt;
-      let lastUpdatedFmt;
-
-      if (createdTime.isAfter(weekAgo)) {
-        createdFmt = createdTime.fromNow();
-      } else {
-        createdFmt = createdTime.format('MMMM DD, YYYY');
-      }
-
-      if (lastUpdatedTime.isAfter(weekAgo)) {
-        lastUpdatedFmt = lastUpdatedTime.fromNow();
-      } else {
-        lastUpdatedFmt = lastUpdatedTime.format('MMMM DD, YYYY');
-      }
+      // time formats
+      const createdFmt = util.getFromNowTimeFmt(sighting.created);
+      const lastUpdatedFmt = util.getFromNowTimeFmt(sighting.lastUpdated);
 
       const sightingFmt = {
         ...sighting,
@@ -156,7 +126,7 @@ export const handleSightingEditPut = (request, response) => {
       // input validation variables
       const sighting = request.body;
       const validatedSighting = validateSighting(sighting);
-      const invalidRequests = Object.keys(validatedSighting).filter((key) => key.indexOf('invalid') >= 0);
+      const invalidRequests = util.getInvalidFormRequests(validatedSighting);
       // handle invalid requests
       if (invalidRequests.length > 0) {
         const sightingFmt = {
@@ -218,7 +188,7 @@ export const handleSightingCreate = (request, response) => {
   // input validation variables
   const sighting = request.body;
   const validatedSighting = validateSighting(sighting);
-  const invalidRequests = Object.keys(validatedSighting).filter((key) => key.indexOf('invalid') >= 0);
+  const invalidRequests = util.getInvalidFormRequests(validatedSighting);
   // handle invalid requests
   if (invalidRequests.length > 0) {
     const validationObj = {
