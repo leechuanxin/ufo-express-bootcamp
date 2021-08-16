@@ -68,8 +68,8 @@ export const handleSighting = (request, response) => {
       // page indexes/ids start from 1 instead of 0
       const sighting = data.sightings[request.params.index - 1];
       // time formats
-      const createdFmt = util.getFromNowTimeFmt(sighting.created);
-      const lastUpdatedFmt = util.getFromNowTimeFmt(sighting.lastUpdated);
+      const createdFmt = util.get2WeeksFromNowTimeFmt(sighting.created);
+      const lastUpdatedFmt = util.get2WeeksFromNowTimeFmt(sighting.lastUpdated);
 
       const sightingFmt = {
         ...util.setSightingWithIndexObj(sighting, request.params.index),

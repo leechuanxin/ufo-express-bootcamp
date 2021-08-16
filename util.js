@@ -41,10 +41,10 @@ export const getUniqueShapesList = (sightings) => {
   return Object.keys(shapeTally);
 };
 
-export const getFromNowTimeFmt = (time) => {
+export const get2WeeksFromNowTimeFmt = (time) => {
   const momentTime = moment(time);
-  const weekAgo = moment().subtract(7, 'days');
-  if (momentTime.isAfter(weekAgo)) {
+  const twoWeeksAgo = moment().subtract(14, 'days');
+  if (momentTime.isAfter(twoWeeksAgo)) {
     return momentTime.fromNow();
   }
   return momentTime.format('MMMM DD, YYYY');
