@@ -55,7 +55,7 @@
                     form-control
                     <%
                     if
-                    (newSighting.city_invalid)
+                    (sighting.city_invalid)
                     {%>
                     is-invalid
                     <%
@@ -65,11 +65,9 @@
                   id="citySpotted"
                   name="city"
                   placeholder="e.g. Marin County"
-                  value="<%= newSighting.city %>"
+                  value="<%= sighting.city %>"
                 />
-                <div class="invalid-feedback">
-                  <%= newSighting.city_invalid %>
-                </div>
+                <div class="invalid-feedback"><%= sighting.city_invalid %></div>
               </div>
               <div class="col-md-6 mb-3">
                 <label for="stateSpotted">
@@ -82,7 +80,7 @@
                     form-control
                     <%
                     if
-                    (newSighting.state_invalid)
+                    (sighting.state_invalid)
                     {%>
                     is-invalid
                     <%
@@ -92,10 +90,10 @@
                   id="stateSpotted"
                   name="state"
                   placeholder="e.g. CA"
-                  value="<%= newSighting.state %>"
+                  value="<%= sighting.state %>"
                 />
                 <div class="invalid-feedback">
-                  <%= newSighting.state_invalid %>
+                  <%= sighting.state_invalid %>
                 </div>
               </div>
               <div class="col-12 mb-3">
@@ -109,7 +107,7 @@
                     form-control
                     <%
                     if
-                    (newSighting.date_time_invalid)
+                    (sighting.date_time_invalid)
                     {%>
                     is-invalid
                     <%
@@ -118,11 +116,11 @@
                   "
                   id="dateSpotted"
                   name="date_time"
-                  value="<%= newSighting.date_time %>"
-                  max="<%= newSighting.timeNow %>"
+                  value="<%= sighting.date_time %>"
+                  max="<%= sighting.timeNow %>"
                 />
                 <div class="invalid-feedback">
-                  <%= newSighting.date_time_invalid %>
+                  <%= sighting.date_time_invalid %>
                 </div>
               </div>
             </div>
@@ -140,7 +138,7 @@
                     form-control
                     <%
                     if
-                    (newSighting.shape_invalid)
+                    (sighting.shape_invalid)
                     {%>
                     is-invalid
                     <%
@@ -150,10 +148,10 @@
                   id="ufoShape"
                   name="shape"
                   placeholder="e.g. Sphere"
-                  value="<%= newSighting.shape %>"
+                  value="<%= sighting.shape %>"
                 />
                 <div class="invalid-feedback">
-                  <%= newSighting.shape_invalid %>
+                  <%= sighting.shape_invalid %>
                 </div>
               </div>
               <div class="col-md-6 mb-3">
@@ -167,7 +165,7 @@
                     form-control
                     <%
                     if
-                    (newSighting.duration_invalid)
+                    (sighting.duration_invalid)
                     {%>
                     is-invalid
                     <%
@@ -177,10 +175,10 @@
                   id="ufoDuration"
                   name="duration"
                   placeholder="e.g. 3 minutes"
-                  value="<%= newSighting.duration %>"
+                  value="<%= sighting.duration %>"
                 />
                 <div class="invalid-feedback">
-                  <%= newSighting.duration_invalid %>
+                  <%= sighting.duration_invalid %>
                 </div>
               </div>
             </div>
@@ -196,7 +194,7 @@
                     form-control
                     <%
                     if
-                    (newSighting.text_invalid)
+                    (sighting.text_invalid)
                     {%>
                     is-invalid
                     <%
@@ -208,11 +206,9 @@
                   rows="5"
                   placeholder="eg. Witnessed an orange, slow moving light. Was looking out my window and saw a orange colored, non blinking light floating across the night sky. Woke up my daughters to confirm what I was seeing. The object did not blink, was definitely not a helicopter. Very bright orange and moved slowly for about 2 minutes, disappeared behind the trees and did not see it again. Never seen anything like this in my life."
                 >
-<%= newSighting.text %></textarea
+<%= sighting.text %></textarea
                 >
-                <div class="invalid-feedback">
-                  <%= newSighting.text_invalid %>
-                </div>
+                <div class="invalid-feedback"><%= sighting.text_invalid %></div>
               </div>
             </div>
             <hr class="mb-4" />
