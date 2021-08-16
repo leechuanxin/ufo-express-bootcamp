@@ -57,3 +57,7 @@ export const getTextSummary = (text) => text
   .concat(
     (text.length > SUMMARY_CHAR_LIMIT) ? '...' : '',
   );
+
+export const getIndexedSightings = (sightings, indexIncrement) => sightings.map(
+  (sighting, index) => ({ ...sighting, idx: index + indexIncrement }),
+);

@@ -8,15 +8,11 @@ const FILENAME = './data.json';
 export const handleIndex = (request, response) => {
   read(FILENAME, (err, data) => {
     const { sightings } = data;
-    const sightingsFmt = sightings
-      .map(
-        // page indexes/ids start from 1 instead of 0
-        (sighting, index) => ({ ...sighting, idx: index + 1 }),
-      );
-    const obj = {
+    // page indexes/ids start from 1 instead of 0
+    const sightingsFmt = util.getIndexedSightings(sightings, 1);
+    response.render('index', {
       sightings: sightingsFmt,
-    };
-    response.render('index', obj);
+    });
   });
 };
 
@@ -43,10 +39,7 @@ export const handleShape = (request, response) => {
     // clean up shapes data from JSON,
     // add index to all sightings regardless of shape
     const { sightings } = data;
-    const sightingsIndexed = sightings.map((sighting, index) => ({
-      ...sighting,
-      idx: index,
-    }));
+    const sightingsIndexed = util.getIndexedSightings(sightings, 0);
     const shapes = util.getShapesList(sightingsIndexed);
     // shape from param to be lower-cased, no spaces
     const shapeParam = util.standardizeParam(request.params.shape);
