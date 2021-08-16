@@ -193,6 +193,7 @@ export const handleSightingCreate = (request, response) => {
   const sighting = request.body;
   const validatedSighting = validateSighting(sighting);
   const invalidRequests = Object.keys(validatedSighting).filter((key) => key.indexOf('invalid') >= 0);
+  // handle invalid requests
   if (invalidRequests.length > 0) {
     const validationObj = {
       ...validatedSighting,
@@ -202,29 +203,27 @@ export const handleSightingCreate = (request, response) => {
       newSighting: validationObj,
     });
   }
-  if (validatedSighting && Object.keys(validatedSighting).length === SIGHTING_EDIT_KEY_LENGTH) {
-    const textLength = sighting.text.length;
-    const sightingFmt = {
-      ...sighting,
-      summary: sighting.text
-        .substring(0, SUMMARY_CHAR_LIMIT)
-        .concat(
-          (textLength > SUMMARY_CHAR_LIMIT) ? '...' : '',
-        ),
-      created: new Date(),
-      lastUpdated: new Date(),
-    };
+  const textLength = sighting.text.length;
+  const sightingFmt = {
+    ...sighting,
+    summary: sighting.text
+      .substring(0, SUMMARY_CHAR_LIMIT)
+      .concat(
+        (textLength > SUMMARY_CHAR_LIMIT) ? '...' : '',
+      ),
+    created: new Date(),
+    lastUpdated: new Date(),
+  };
     // Add new recipe data in request.body to recipes array in data.json.
-    add(FILENAME, 'sightings', sightingFmt, (err, str) => {
-      if (err) {
-        response.status(500).send('DB write error.');
-        return;
-      }
+  add(FILENAME, 'sightings', sightingFmt, (err, str) => {
+    if (err) {
+      response.status(500).send('DB write error.');
+      return;
+    }
 
-      const obj = JSON.parse(str);
-      // page indexes/ids start from 1 instead of 0
-      const idx = obj.sightings.length;
-      response.redirect(`/sighting/${idx}`);
-    });
-  }
+    const obj = JSON.parse(str);
+    // page indexes/ids start from 1 instead of 0
+    const idx = obj.sightings.length;
+    response.redirect(`/sighting/${idx}`);
+  });
 };
