@@ -1,37 +1,36 @@
 <%- include('headers/html-header', {title: 'Sightings'}); -%>
-<nav class="navbar navbar-dark bg-dark fixed-top">
-  <!-- Navbar content -->
-  <div class="container-fluid">
-    <a class="navbar-brand" href="#">Sightings</a>
-  </div>
-</nav>
-<div class="container pt-5">
+<div class="container-fluid">
   <div class="row">
-    <p class="text-center">You have visited this page <%= visits %> time(s).</p>
-    <% if (sightings.length > 0) { %>
-    <table class="table">
-      <thead>
-        <tr>
-          <th scope="col" class="text-center">Sighting</th>
-          <th scope="col" class="text-center">Link</th>
-        </tr>
-      </thead>
-      <tbody>
-        <% sightings.forEach(sighting => { %>
-        <tr>
-          <th scope="row" class="text-center align-middle">
-            <%= sighting.idx %>
-          </th>
-          <td class="text-center align-middle">
-            <a href="/sighting/<%= sighting.idx %>">
-              <%= sighting.summary %>
-            </a>
-          </td>
-        </tr>
-        <% }) %>
-      </tbody>
-    </table>
-    <% } %>
+    <%- include('sidebar/sidebar', {}); -%>
+    <div class="col-12 col-md-9">
+      <p class="text-center">
+        You have visited this page <%= visits %> time(s).
+      </p>
+      <% if (sightings.length > 0) { %>
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col" class="text-center">Sighting</th>
+            <th scope="col" class="text-center">Link</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% sightings.forEach(sighting => { %>
+          <tr>
+            <th scope="row" class="text-center align-middle">
+              <%= sighting.idx %>
+            </th>
+            <td class="text-center align-middle">
+              <a href="/sighting/<%= sighting.idx %>">
+                <%= sighting.summary %>
+              </a>
+            </td>
+          </tr>
+          <% }) %>
+        </tbody>
+      </table>
+      <% } %>
+    </div>
   </div>
 </div>
 <%- include('footers/html-footer'); -%>

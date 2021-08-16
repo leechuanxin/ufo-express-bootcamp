@@ -1,32 +1,38 @@
-<%- include('headers/html-header', {title: 'Shapes'}); -%>
+<%- include('headers/html-header', {title: 'Shapes'}); -%> <%#
 <nav class="navbar navbar-dark bg-dark fixed-top">
   <!-- Navbar content -->
   <div class="container-fluid">
     <a class="navbar-brand" href="#">Sightings</a>
   </div>
 </nav>
-<div class="container pt-5">
+%>
+<div class="container-fluid">
   <div class="row">
-    <table class="table">
-      <thead>
-        <tr>
-          <th scope="col" class="text-center">Shape</th>
-          <th scope="col" class="text-center">Link</th>
-        </tr>
-      </thead>
-      <tbody>
-        <% shapes.forEach((shape, index) => { %>
-        <tr>
-          <th scope="row" class="text-center align-middle"><%= index + 1 %></th>
-          <td class="text-center align-middle">
-            <a href="/shapes/<%= shape.split(' ').join('-').toLowerCase() %>">
-              <%= shape %>
-            </a>
-          </td>
-        </tr>
-        <% }) %>
-      </tbody>
-    </table>
+    <%- include('sidebar/sidebar', {}); -%>
+    <div class="col-12 col-md-9">
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col" class="text-center">Shape</th>
+            <th scope="col" class="text-center">Link</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% shapes.forEach((shape, index) => { %>
+          <tr>
+            <th scope="row" class="text-center align-middle">
+              <%= index + 1 %>
+            </th>
+            <td class="text-center align-middle">
+              <a href="/shapes/<%= shape.split(' ').join('-').toLowerCase() %>">
+                <%= shape %>
+              </a>
+            </td>
+          </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
   </div>
 </div>
 <%- include('footers/html-footer'); -%>
