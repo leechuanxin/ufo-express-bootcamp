@@ -22,8 +22,13 @@ export const handleIndex = (request, response) => {
       visits += 1;
       response.cookie('visits', visits); // set a new value to send back
 
+      // split array
+      const arrayToSplit = [...sightingsFmt];
+      const latest = arrayToSplit.splice(arrayToSplit.length - 3);
+
       response.render('index', {
-        sightings: sightingsFmt,
+        latest: latest.reverse(),
+        sightings: arrayToSplit.reverse(),
         visits,
       });
     } else {

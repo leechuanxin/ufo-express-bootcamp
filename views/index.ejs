@@ -6,7 +6,30 @@
       <p class="text-center">
         You have visited this page <%= visits %> time(s).
       </p>
-      <% if (sightings.length > 0) { %>
+      <% if (latest.length > 0) { %>
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col" class="text-center">Latest Sighting</th>
+            <th scope="col" class="text-center">Link</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% latest.forEach(sighting => { %>
+          <tr>
+            <th scope="row" class="text-center align-middle">
+              <%= sighting.idx %>
+            </th>
+            <td class="text-center align-middle">
+              <a href="/sighting/<%= sighting.idx %>">
+                <%= sighting.summary %>
+              </a>
+            </td>
+          </tr>
+          <% }) %>
+        </tbody>
+      </table>
+      <% } %> <% if (sightings.length > 0) { %>
       <table class="table">
         <thead>
           <tr>
