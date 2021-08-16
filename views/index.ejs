@@ -7,12 +7,12 @@
 </nav>
 <div class="container pt-5">
   <div class="row">
+    <% if (sightings.length > 0) { %>
     <table class="table">
       <thead>
         <tr>
           <th scope="col" class="text-center">Sighting</th>
           <th scope="col" class="text-center">Link</th>
-          <th scope="col">Action</th>
         </tr>
       </thead>
       <tbody>
@@ -26,18 +26,11 @@
               <%= sighting.summary %>
             </a>
           </td>
-          <td class="align-middle">
-            <form
-              action="/sighting/<%= sighting.idx %>/delete?_method=DELETE"
-              method="POST"
-            >
-              <input class="btn btn-danger" type="submit" value="Delete" />
-            </form>
-          </td>
         </tr>
         <% }) %>
       </tbody>
     </table>
+    <% } %>
   </div>
 </div>
 <%- include('footers/html-footer'); -%>

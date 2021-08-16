@@ -10,6 +10,13 @@
         <a class="btn btn-outline-light" href="/sighting/<%= idx %>/edit"
           >Edit</a
         >
+        <form
+          class="d-inline-block"
+          action="/sighting/<%= idx %>/delete?_method=DELETE"
+          method="POST"
+        >
+          <input class="btn btn-danger" type="submit" value="Delete" />
+        </form>
       </div>
     </div>
   </div>
