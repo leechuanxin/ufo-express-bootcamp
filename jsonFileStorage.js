@@ -180,5 +180,22 @@ export function editOneElement(filename, key, index, payload, callback) {
  * @returns undefined
  */
 export function remove(filename, key, index, callback) {
-  editOneElement(filename, key, index, null, callback);
+  // Remove element from DB at given index
+  read(filename, (err, data) => {
+    // page indexes/ids start from 1 instead of 0
+    if (index >= data[key].length || index < 0) {
+      // Call callback with relevant error message to let client handle
+      callback('Index does not exist');
+    } else {
+      // page indexes/ids start from 1 instead of 0
+      data.sightings.splice(index, 1);
+      write(filename, data, (error) => {
+        if (!error) {
+          callback(null);
+        } else {
+          callback('DB write error');
+        }
+      });
+    }
+  });
 }

@@ -1,12 +1,12 @@
 import moment from 'moment';
-import { add, read, write } from './jsonFileStorage.js';
+import * as filestorage from './jsonFileStorage.js';
 import * as util from './util.js';
 import validateSighting from './validation.js';
 
 const FILENAME = './data.json';
 
 export const handleIndex = (request, response) => {
-  read(FILENAME, (err, data) => {
+  filestorage.read(FILENAME, (err, data) => {
     const { sightings } = data;
     // page indexes/ids start from 1 instead of 0
     const sightingsFmt = util.getIndexedSightings(sightings, 1);
@@ -27,7 +27,7 @@ export const handleNewSighting = (request, response) => {
 };
 
 export const handleShapes = (request, response) => {
-  read(FILENAME, (err, data) => {
+  filestorage.read(FILENAME, (err, data) => {
     const { sightings } = data;
     const uniqueShapesList = util.getUniqueShapesList(sightings);
     const obj = { shapes: uniqueShapesList };
@@ -36,7 +36,7 @@ export const handleShapes = (request, response) => {
 };
 
 export const handleShape = (request, response) => {
-  read(FILENAME, (err, data) => {
+  filestorage.read(FILENAME, (err, data) => {
     // clean up shapes data from JSON,
     // add index to all sightings regardless of shape
     const { sightings } = data;
@@ -61,7 +61,7 @@ export const handleShape = (request, response) => {
 };
 
 export const handleSighting = (request, response) => {
-  read(FILENAME, (err, data) => {
+  filestorage.read(FILENAME, (err, data) => {
     // page indexes/ids start from 1 instead of 0
     if (request.params.index > data.sightings.length || request.params.index < 1) {
       response.status(404).send('Sorry, we cannot find that!');
@@ -88,7 +88,7 @@ export const handleSightingEdit = (request, response) => {
   if (Number.isNaN(Number(idxParam))) {
     response.status(406).send('Your sighting ID has to be a number!');
   }
-  read(FILENAME, (err, data) => {
+  filestorage.read(FILENAME, (err, data) => {
     // page indexes/ids start from 1 instead of 0
     if (request.params.index > data.sightings.length || request.params.index < 1) {
       response.status(404).send('Sorry, we cannot find that!');
@@ -110,7 +110,7 @@ export const handleSightingEditPut = (request, response) => {
     response.status(406).send('Your sighting ID has to be a number!');
   }
 
-  read(FILENAME, (err, data) => {
+  filestorage.read(FILENAME, (err, data) => {
     // page indexes/ids start from 1 instead of 0
     if (idxParam > data.sightings.length || idxParam < 1) {
       response.status(404).send('Sorry, we cannot find that!');
@@ -130,7 +130,7 @@ export const handleSightingEditPut = (request, response) => {
         const createdTime = data.sightings[idxParam - 1].created;
         // page indexes/ids start from 1 instead of 0
         data.sightings[idxParam - 1] = util.getSightingToUpdate(sighting, createdTime);
-        write(FILENAME, data, (error) => {
+        filestorage.write(FILENAME, data, (error) => {
           if (error) {
             response.status(500).send('DB write error. We cannot edit this sighting. Please try again!');
           }
@@ -146,21 +146,14 @@ export const handleSightingDelete = (request, response) => {
   if (Number.isNaN(Number(idxParam))) {
     response.status(406).send('Your sighting ID has to be a number!');
   } else {
-    // Remove element from DB at given index
-    read(FILENAME, (err, data) => {
-      // page indexes/ids start from 1 instead of 0
-      if (request.params.index > data.sightings.length || request.params.index < 1) {
+    // page indexes/ids start from 1 instead of 0
+    filestorage.remove(FILENAME, 'sightings', idxParam - 1, (err) => {
+      if (err === 'Index does not exist') {
         response.status(404).send('Sorry, we cannot find that!');
-      } else {
-        // page indexes/ids start from 1 instead of 0
-        data.sightings.splice(idxParam - 1, 1);
-        write(FILENAME, data, (error) => {
-          if (!error) {
-            response.redirect('/');
-          } else {
-            response.status(500).send('DB write error. We cannot delete this sighting. Please try again!');
-          }
-        });
+      } else if (err === 'DB write error') {
+        response.status(500).send('DB write error. We cannot delete this sighting. Please try again!');
+      } else if (!err) {
+        response.redirect('/');
       }
     });
   }
@@ -185,7 +178,7 @@ export const handleSightingCreate = (request, response) => {
     // no created time argument passed in, so it defaults to creating a new one
     const sightingFmt = util.getSightingToUpdate(sighting);
     // Add new recipe data in request.body to recipes array in data.json.
-    add(FILENAME, 'sightings', sightingFmt, (err, str) => {
+    filestorage.add(FILENAME, 'sightings', sightingFmt, (err, str) => {
       if (err) {
         response.status(500).send('DB write error.');
         return;
