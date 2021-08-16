@@ -7,12 +7,28 @@ const FILENAME = './data.json';
 
 export const handleIndex = (request, response) => {
   filestorage.read(FILENAME, (err, data) => {
-    const { sightings } = data;
-    // page indexes/ids start from 1 instead of 0
-    const sightingsFmt = util.getIndexedSightings(sightings, 1);
-    response.render('index', {
-      sightings: sightingsFmt,
-    });
+    if (!err) {
+      const { sightings } = data;
+      // page indexes/ids start from 1 instead of 0
+      const sightingsFmt = util.getIndexedSightings(sightings, 1);
+
+      // visits cookie
+      let visits = 0;
+      // check if it's not the first time a request has been made
+      if (request.cookies.visits) {
+        visits = Number(request.cookies.visits); // get the value from the request
+      }
+      // set a new value of the cookie
+      visits += 1;
+      response.cookie('visits', visits); // set a new value to send back
+
+      response.render('index', {
+        sightings: sightingsFmt,
+        visits,
+      });
+    } else {
+      response.status(500).send('DB read error. We cannot access this page. Please try again!');
+    }
   });
 };
 
