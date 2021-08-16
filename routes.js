@@ -20,8 +20,9 @@ export const handleNewSighting = (request, response) => {
   const obj = {
     timeNow: moment().format('YYYY-MM-DDTHH:mm'),
   };
-  response.render('newsighting', {
+  response.render('editsighting', {
     sighting: obj,
+    type: 'new',
   });
 };
 
@@ -98,7 +99,7 @@ export const handleSightingEdit = (request, response) => {
         ...util.setSightingWithIndexObj(sighting, request.params.index),
         timeNow: moment().format('YYYY-MM-DDTHH:mm'),
       };
-      response.render('editsighting', { sighting: sightingFmt });
+      response.render('editsighting', { sighting: sightingFmt, type: 'edit' });
     }
   });
 };
@@ -124,7 +125,7 @@ export const handleSightingEditPut = (request, response) => {
           ...util.setSightingWithIndexObj(validatedSighting, idxParam),
           timeNow: moment().format('YYYY-MM-DDTHH:mm'),
         };
-        response.render('editsighting', { sighting: sightingFmt });
+        response.render('editsighting', { sighting: sightingFmt, type: 'edit' });
       } else {
         const createdTime = data.sightings[idxParam - 1].created;
         // page indexes/ids start from 1 instead of 0
@@ -176,8 +177,9 @@ export const handleSightingCreate = (request, response) => {
       ...validatedSighting,
       timeNow: moment().format('YYYY-MM-DDTHH:mm'),
     };
-    response.render('newsighting', {
+    response.render('editsighting', {
       sighting: validationObj,
+      type: 'new',
     });
   } else {
     // no created time argument passed in, so it defaults to creating a new one
