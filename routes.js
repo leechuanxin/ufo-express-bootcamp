@@ -72,8 +72,7 @@ export const handleSighting = (request, response) => {
       const lastUpdatedFmt = util.getFromNowTimeFmt(sighting.lastUpdated);
 
       const sightingFmt = {
-        ...sighting,
-        idx: request.params.index,
+        ...util.setSightingWithIndexObj(sighting, request.params.index),
         createdFmt,
         lastUpdatedFmt,
         dateTimeFmt: moment(sighting.date_time).format('dddd, MMMM Do, YYYY'),
@@ -96,8 +95,7 @@ export const handleSightingEdit = (request, response) => {
       // page indexes/ids start from 1 instead of 0
       const sighting = data.sightings[request.params.index - 1];
       const sightingFmt = {
-        ...sighting,
-        idx: request.params.index,
+        ...util.setSightingWithIndexObj(sighting, request.params.index),
         timeNow: moment().format('YYYY-MM-DDTHH:mm'),
       };
       response.render('editsighting', { sighting: sightingFmt });
@@ -123,19 +121,14 @@ export const handleSightingEditPut = (request, response) => {
       // handle invalid requests
       if (invalidRequests.length > 0) {
         const sightingFmt = {
-          ...validatedSighting,
-          idx: idxParam,
+          ...util.setSightingWithIndexObj(validatedSighting, idxParam),
           timeNow: moment().format('YYYY-MM-DDTHH:mm'),
         };
         response.render('editsighting', { sighting: sightingFmt });
       } else {
+        const createdTime = data.sightings[idxParam - 1].created;
         // page indexes/ids start from 1 instead of 0
-        data.sightings[idxParam - 1] = {
-          ...sighting,
-          summary: util.getTextSummary(sighting.text),
-          created: data.sightings[idxParam - 1].created || new Date(),
-          lastUpdated: new Date(),
-        };
+        data.sightings[idxParam - 1] = util.getSightingToUpdate(sighting, createdTime);
         write(FILENAME, data, (error) => {
           if (error) {
             response.status(500).send('DB write error. We cannot edit this sighting. Please try again!');
@@ -187,13 +180,9 @@ export const handleSightingCreate = (request, response) => {
       sighting: validationObj,
     });
   } else {
-    const sightingFmt = {
-      ...sighting,
-      summary: util.getTextSummary(sighting.text),
-      created: new Date(),
-      lastUpdated: new Date(),
-    };
-      // Add new recipe data in request.body to recipes array in data.json.
+    // no created time argument passed in, so it defaults to creating a new one
+    const sightingFmt = util.getSightingToUpdate(sighting);
+    // Add new recipe data in request.body to recipes array in data.json.
     add(FILENAME, 'sightings', sightingFmt, (err, str) => {
       if (err) {
         response.status(500).send('DB write error.');

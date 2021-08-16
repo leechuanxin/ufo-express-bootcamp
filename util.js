@@ -61,3 +61,15 @@ export const getTextSummary = (text) => text
 export const getIndexedSightings = (sightings, indexIncrement) => sightings.map(
   (sighting, index) => ({ ...sighting, idx: index + indexIncrement }),
 );
+
+export const getSightingToUpdate = (sighting, createdTime) => ({
+  ...sighting,
+  summary: getTextSummary(sighting.text),
+  created: createdTime || new Date(),
+  lastUpdated: new Date(),
+});
+
+export const setSightingWithIndexObj = (sighting, idx) => ({
+  ...sighting,
+  idx,
+});
