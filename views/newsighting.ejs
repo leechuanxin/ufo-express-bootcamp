@@ -51,13 +51,25 @@
                 </label>
                 <input
                   type="text"
-                  class="form-control"
+                  class="
+                    form-control
+                    <%
+                    if
+                    (newSighting.city_invalid)
+                    {%>
+                    is-invalid
+                    <%
+                    }
+                    %>
+                  "
                   id="citySpotted"
                   name="city"
                   placeholder="e.g. Marin County"
-                  value=""
+                  value="<%= newSighting.city %>"
                 />
-                <div class="invalid-feedback">Valid city is required.</div>
+                <div class="invalid-feedback">
+                  <%= newSighting.city_invalid %>
+                </div>
               </div>
               <div class="col-md-6 mb-3">
                 <label for="stateSpotted">
@@ -66,13 +78,25 @@
                 </label>
                 <input
                   type="text"
-                  class="form-control"
+                  class="
+                    form-control
+                    <%
+                    if
+                    (newSighting.state_invalid)
+                    {%>
+                    is-invalid
+                    <%
+                    }
+                    %>
+                  "
                   id="stateSpotted"
                   name="state"
                   placeholder="e.g. CA"
-                  value=""
+                  value="<%= newSighting.state %>"
                 />
-                <div class="invalid-feedback">Valid state is required.</div>
+                <div class="invalid-feedback">
+                  <%= newSighting.state_invalid %>
+                </div>
               </div>
               <div class="col-12 mb-3">
                 <label for="dateSpotted">
@@ -81,14 +105,24 @@
                 </label>
                 <input
                   type="datetime-local"
-                  class="form-control"
+                  class="
+                    form-control
+                    <%
+                    if
+                    (newSighting.date_time_invalid)
+                    {%>
+                    is-invalid
+                    <%
+                    }
+                    %>
+                  "
                   id="dateSpotted"
                   name="date_time"
-                  value=""
-                  max="<%= timeNow %>"
+                  value="<%= newSighting.date_time %>"
+                  max="<%= newSighting.timeNow %>"
                 />
                 <div class="invalid-feedback">
-                  Valid date and time are required.
+                  <%= newSighting.date_time_invalid %>
                 </div>
               </div>
             </div>
@@ -102,13 +136,25 @@
                 </label>
                 <input
                   type="text"
-                  class="form-control"
+                  class="
+                    form-control
+                    <%
+                    if
+                    (newSighting.shape_invalid)
+                    {%>
+                    is-invalid
+                    <%
+                    }
+                    %>
+                  "
                   id="ufoShape"
                   name="shape"
                   placeholder="e.g. Sphere"
-                  value=""
+                  value="<%= newSighting.shape %>"
                 />
-                <div class="invalid-feedback">Valid shape is required.</div>
+                <div class="invalid-feedback">
+                  <%= newSighting.shape_invalid %>
+                </div>
               </div>
               <div class="col-md-6 mb-3">
                 <label for="ufoDuration">
@@ -117,13 +163,25 @@
                 </label>
                 <input
                   type="text"
-                  class="form-control"
+                  class="
+                    form-control
+                    <%
+                    if
+                    (newSighting.duration_invalid)
+                    {%>
+                    is-invalid
+                    <%
+                    }
+                    %>
+                  "
                   id="ufoDuration"
                   name="duration"
                   placeholder="e.g. 3 minutes"
-                  value=""
+                  value="<%= newSighting.duration %>"
                 />
-                <div class="invalid-feedback">Valid duration is required.</div>
+                <div class="invalid-feedback">
+                  <%= newSighting.duration_invalid %>
+                </div>
               </div>
             </div>
             <hr class="mb-3" />
@@ -134,12 +192,27 @@
                   <strong>Tell us the story of your UFO sighting!</strong>
                 </label>
                 <textarea
-                  class="form-control"
+                  class="
+                    form-control
+                    <%
+                    if
+                    (newSighting.text_invalid)
+                    {%>
+                    is-invalid
+                    <%
+                    }
+                    %>
+                  "
                   id="ufoStory"
                   name="text"
                   rows="5"
                   placeholder="eg. Witnessed an orange, slow moving light. Was looking out my window and saw a orange colored, non blinking light floating across the night sky. Woke up my daughters to confirm what I was seeing. The object did not blink, was definitely not a helicopter. Very bright orange and moved slowly for about 2 minutes, disappeared behind the trees and did not see it again. Never seen anything like this in my life."
-                ></textarea>
+                >
+<%= newSighting.text %></textarea
+                >
+                <div class="invalid-feedback">
+                  <%= newSighting.text_invalid %>
+                </div>
               </div>
             </div>
             <hr class="mb-4" />

@@ -1,6 +1,7 @@
 import moment from 'moment';
 import { add, read, write } from './jsonFileStorage.js';
-import { standardizeParam, validateSighting } from './util.js';
+import standardizeParam from './util.js';
+import validateSighting from './validation.js';
 
 const FILENAME = './data.json';
 const SUMMARY_CHAR_LIMIT = 100;
@@ -26,7 +27,9 @@ export const handleNewSighting = (request, response) => {
   const obj = {
     timeNow: moment().format('YYYY-MM-DDTHH:mm'),
   };
-  response.render('newsighting', obj);
+  response.render('newsighting', {
+    newSighting: obj,
+  });
 };
 
 export const handleShapes = (request, response) => {
@@ -186,12 +189,24 @@ export const handleSightingDelete = (request, response) => {
 };
 
 export const handleSightingCreate = (request, response) => {
-  const textLength = request.body.text.length;
-  const validatedSighting = validateSighting(request.body, response);
-  if (validatedSighting && Object.keys(validatedSighting).length === SIGHTING_EDIT_KEY_LENGTH) {
-    const sighting = {
+  // input validation variables
+  const sighting = request.body;
+  const validatedSighting = validateSighting(sighting);
+  const invalidRequests = Object.keys(validatedSighting).filter((key) => key.indexOf('invalid') >= 0);
+  if (invalidRequests.length > 0) {
+    const validationObj = {
       ...validatedSighting,
-      summary: validatedSighting.text
+      timeNow: moment().format('YYYY-MM-DDTHH:mm'),
+    };
+    response.render('newsighting', {
+      newSighting: validationObj,
+    });
+  }
+  if (validatedSighting && Object.keys(validatedSighting).length === SIGHTING_EDIT_KEY_LENGTH) {
+    const textLength = sighting.text.length;
+    const sightingFmt = {
+      ...sighting,
+      summary: sighting.text
         .substring(0, SUMMARY_CHAR_LIMIT)
         .concat(
           (textLength > SUMMARY_CHAR_LIMIT) ? '...' : '',
@@ -200,7 +215,7 @@ export const handleSightingCreate = (request, response) => {
       lastUpdated: new Date(),
     };
     // Add new recipe data in request.body to recipes array in data.json.
-    add(FILENAME, 'sightings', sighting, (err, str) => {
+    add(FILENAME, 'sightings', sightingFmt, (err, str) => {
       if (err) {
         response.status(500).send('DB write error.');
         return;
