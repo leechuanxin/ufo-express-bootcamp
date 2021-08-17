@@ -4,21 +4,18 @@
     <%- include('sidebar/sidebar', { sidebar: { active: "sighting" } }); -%>
     <div class="col-12 col-md-9 py-3">
       <%- include('headers/header', {}); -%>
-      <div class="row">
-        <div class="col-12">
-          <p class="text-end mb-0">
+      <div class="row d-flex align-items-center">
+        <div class="col-12 col-md-6">
+          <p class="mb-0 text-center text-md-start">
             <small class="fst-italic">Created: <%= createdFmt %></small>
           </p>
-          <p class="text-end">
+          <p class="text-center text-md-start">
             <small class="fst-italic"
               >Last Updated: <%= lastUpdatedFmt %></small
             >
           </p>
         </div>
-      </div>
-      <div class="row">
-        <div class="col-6"></div>
-        <div class="col-6 text-end">
+        <div class="col-12 col-md-6 text-center text-md-end">
           <a class="btn btn-outline-light" href="/sighting/<%= idx %>/edit"
             >Edit</a
           >
