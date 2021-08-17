@@ -6,7 +6,7 @@
       <%- include('headers/header', {}); -%>
       <div class="row">
         <div class="col-12">
-          <p class="text-end">
+          <p class="text-end mb-0">
             <small class="fst-italic">Created: <%= createdFmt %></small>
           </p>
           <p class="text-end">
@@ -16,11 +16,27 @@
           </p>
         </div>
       </div>
+      <div class="row">
+        <div class="col-6"></div>
+        <div class="col-6 text-end">
+          <a class="btn btn-outline-light" href="/sighting/<%= idx %>/edit"
+            >Edit</a
+          >
+          <form
+            class="d-inline-block"
+            action="/sighting/<%= idx %>/delete?_method=DELETE"
+            method="POST"
+          >
+            <input class="btn btn-danger" type="submit" value="Delete" />
+          </form>
+        </div>
+      </div>
+      <hr />
       <form action="/sighting" method="POST">
         <div class="row">
-          <h4 class="mb-3">Location</h4>
+          <h4 class="mb-3 index-header">Location</h4>
           <div class="col-md-6 mb-3">
-            <p>
+            <p class="index-header2">
               <strong>City</strong>
               <small class="fst-italic"> (where the UFO is sighted) </small>
             </p>
@@ -28,7 +44,7 @@
           </div>
 
           <div class="col-md-6 mb-3">
-            <p>
+            <p class="index-header2">
               <strong>State</strong>
               <small class="fst-italic"> (where the UFO is sighted) </small>
             </p>
@@ -36,7 +52,7 @@
           </div>
 
           <div class="col-12 mb-3">
-            <p>
+            <p class="index-header2">
               <strong>Date & Time</strong>
               <small class="fst-italic"> (when the UFO is sighted) </small>
             </p>
@@ -45,16 +61,16 @@
         </div>
         <hr class="mb-3" />
         <div class="row">
-          <h4 class="mb-3">UFO Sighting Specifics</h4>
+          <h4 class="mb-3 index-header">UFO Sighting Specifics</h4>
           <div class="col-md-6 mb-3">
-            <p>
+            <p class="index-header2">
               <strong>Shape</strong>
               <small class="fst-italic"> (of the UFO) </small>
             </p>
             <p class="m-0"><%= shape %></p>
           </div>
           <div class="col-md-6 mb-3">
-            <p>
+            <p class="index-header2">
               <strong>Duration</strong>
               <small class="fst-italic"> (of the UFO appearance) </small>
             </p>
@@ -64,13 +80,8 @@
         <hr class="mb-3" />
         <div class="row">
           <div class="col-12 mb-3">
-            <h4 class="mb-3">Other Information</h4>
-            <p>
-              <strong>Summary</strong>
-            </p>
-            <p><%= summary %></p>
-            <hr class="mb-3" />
-            <p>
+            <h4 class="mb-3 index-header">Other Information</h4>
+            <p class="index-header2">
               <strong>Tell us the story of your UFO sighting!</strong>
             </p>
             <p><%= text %></p>

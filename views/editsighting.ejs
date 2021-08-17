@@ -11,9 +11,9 @@ ID: ${sighting.idx}` : `Report a UFO Sighting!`}); -%>
         method="POST"
       >
         <div class="row">
-          <h4 class="mb-3">Location</h4>
+          <h4 class="mb-3 index-header">Location</h4>
           <div class="col-md-6 mb-3">
-            <label for="citySpotted">
+            <label class="index-header2" for="citySpotted">
               <strong>City</strong>
               <small class="fst-italic"> (where the UFO is sighted) </small>
             </label>
@@ -38,7 +38,7 @@ ID: ${sighting.idx}` : `Report a UFO Sighting!`}); -%>
             <div class="invalid-feedback"><%= sighting.city_invalid %></div>
           </div>
           <div class="col-md-6 mb-3">
-            <label for="stateSpotted">
+            <label class="index-header2" for="stateSpotted">
               <strong>State</strong>
               <small class="fst-italic"> (where the UFO is sighted) </small>
             </label>
@@ -63,7 +63,7 @@ ID: ${sighting.idx}` : `Report a UFO Sighting!`}); -%>
             <div class="invalid-feedback"><%= sighting.state_invalid %></div>
           </div>
           <div class="col-12 mb-3">
-            <label for="dateSpotted">
+            <label class="index-header2" for="dateSpotted">
               <strong>Date &amp; Time</strong>
               <small class="fst-italic"> (when the UFO is sighted) </small>
             </label>
@@ -92,9 +92,9 @@ ID: ${sighting.idx}` : `Report a UFO Sighting!`}); -%>
         </div>
         <hr class="mb-3" />
         <div class="row">
-          <h4 class="mb-3">UFO Sighting Specifics</h4>
+          <h4 class="mb-3 index-header">UFO Sighting Specifics</h4>
           <div class="col-md-6 mb-3">
-            <label for="ufoShape">
+            <label class="index-header2" for="ufoShape">
               <strong>Shape</strong>
               <small class="fst-italic"> (of the UFO) </small>
             </label>
@@ -119,7 +119,7 @@ ID: ${sighting.idx}` : `Report a UFO Sighting!`}); -%>
             <div class="invalid-feedback"><%= sighting.shape_invalid %></div>
           </div>
           <div class="col-md-6 mb-3">
-            <label for="ufoDuration">
+            <label class="index-header2" for="ufoDuration">
               <strong>Duration</strong>
               <small class="fst-italic"> (of the UFO appearance) </small>
             </label>
@@ -147,8 +147,8 @@ ID: ${sighting.idx}` : `Report a UFO Sighting!`}); -%>
         <hr class="mb-3" />
         <div class="row">
           <div class="col-12 mb-3">
-            <h4 class="mb-3">Other Information</h4>
-            <label for="ufoStory">
+            <h4 class="mb-3 index-header">Other Information</h4>
+            <label class="index-header2" for="ufoStory">
               <strong>Tell us the story of your UFO sighting!</strong>
             </label>
             <textarea
