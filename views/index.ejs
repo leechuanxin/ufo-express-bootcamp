@@ -1,57 +1,115 @@
 <%- include('headers/html-header', {title: 'Sightings'}); -%>
 <div class="container-fluid">
-  <div class="row">
+  <div class="row align-items-stretch">
     <%- include('sidebar/sidebar', {}); -%>
-    <div class="col-12 col-md-9">
+    <div class="col-12 col-md-9 pt-3">
+      <div class="row">
+        <div class="col-12 d-flex justify-content-center">
+          <div class="d-flex align-items-center">
+            <img src="images/alien-baby.gif" />
+            <h1 class="fire-text d-inline-block">UFO Sightings</h1>
+            <img src="images/alien-baby.gif" />
+          </div>
+        </div>
+      </div>
       <p class="text-center">
         You have visited this page <%= visits %> time(s).
       </p>
       <% if (latest.length > 0) { %>
-      <table class="table">
-        <thead>
-          <tr>
-            <th scope="col" class="text-center">Latest Sighting</th>
-            <th scope="col" class="text-center">Link</th>
-          </tr>
-        </thead>
-        <tbody>
-          <% latest.forEach(sighting => { %>
-          <tr>
-            <th scope="row" class="text-center align-middle">
-              <%= sighting.idx %>
-            </th>
-            <td class="text-center align-middle">
-              <a href="/sighting/<%= sighting.idx %>">
-                <%= sighting.summary %>
-              </a>
-            </td>
-          </tr>
-          <% }) %>
-        </tbody>
-      </table>
-      <% } %> <% if (sightings.length > 0) { %>
-      <table class="table">
-        <thead>
-          <tr>
-            <th scope="col" class="text-center">Sighting</th>
-            <th scope="col" class="text-center">Link</th>
-          </tr>
-        </thead>
-        <tbody>
-          <% sightings.forEach(sighting => { %>
-          <tr>
-            <th scope="row" class="text-center align-middle">
-              <%= sighting.idx %>
-            </th>
-            <td class="text-center align-middle">
-              <a href="/sighting/<%= sighting.idx %>">
-                <%= sighting.summary %>
-              </a>
-            </td>
-          </tr>
-          <% }) %>
-        </tbody>
-      </table>
+      <p
+        href="/"
+        class="
+          d-flex
+          align-items-center
+          mb-3 mb-md-0
+          me-md-auto
+          ps-3
+          link-dark
+          text-decoration-none
+        "
+      >
+        <span class="fs-4 index-header">Latest</span>
+      </p>
+      <hr />
+      <% latest.forEach((sighting, index) => { %>
+      <div
+        class="
+          row
+          mb-3
+          pb-3
+          <%
+          if
+          (index
+          !==
+          latest.length
+          -
+          1)
+          {
+          %>border-bottom
+          border-white<%
+          }
+          %>
+          align-items-center
+        "
+      >
+        <div class="col-4">
+          <a href="/sighting/<%= sighting.idx %>"
+            ><img
+              class="img-fluid"
+              src="https://picsum.photos/900/600?random=<%= sighting.idx %>"
+          /></a>
+        </div>
+        <div class="col-8">
+          <p>
+            <a class="created-link" href="/sighting/<%= sighting.idx %>">
+              <small><%= sighting.createdFmt %></small>
+            </a>
+          </p>
+          <p class="m-0">
+            <a href="/sighting/<%= sighting.idx %>">
+              <%= sighting.summary %>
+            </a>
+          </p>
+        </div>
+      </div>
+      <% }) %> <% } %><% if (sightings.length > 0) { %>
+      <p
+        href="/"
+        class="
+          d-flex
+          align-items-center
+          mb-3 mb-md-0
+          me-md-auto
+          ps-3
+          link-dark
+          text-decoration-none
+        "
+      >
+        <span class="fs-4 index-header2">Articles</span>
+      </p>
+      <hr />
+      <div class="row align-items-stretch pb-3">
+        <% sightings.forEach(sighting => { %>
+        <div class="col-12 col-sm-6 col-md-4 mb-3">
+          <p class="mb-1 text-center">
+            <img
+              class="img-fluid"
+              src="https://picsum.photos/900/600?random=<%= sighting.idx %>"
+            />
+          </p>
+          <p class="mb-1 text-center">
+            <a class="created-link" href="/sighting/<%= sighting.idx %>">
+              <small><%= sighting.createdFmt %></small>
+            </a>
+          </p>
+          <p class="mb-1 text-center">
+            <a href="/sighting/<%= sighting.idx %>">
+              <%= sighting.summary %>
+            </a>
+          </p>
+        </div>
+        <% }) %>
+      </div>
       <% } %>
     </div>
   </div>

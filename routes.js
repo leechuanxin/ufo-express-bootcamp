@@ -10,7 +10,10 @@ export const handleIndex = (request, response) => {
     if (!err) {
       const { sightings } = data;
       // page indexes/ids start from 1 instead of 0
-      const sightingsFmt = util.getIndexedSightings(sightings, 1);
+      const sightingsFmt = util.getIndexedSightings(sightings, 1).map((sighting) => ({
+        ...sighting,
+        createdFmt: moment(sighting.created).format('dddd, MMMM Do, YYYY'),
+      }));
 
       // visits cookie
       let visits = 0;

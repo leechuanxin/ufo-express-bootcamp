@@ -14,6 +14,8 @@ app.use(methodOverride('_method'));
 app.use(express.urlencoded({ extended: false }));
 // To parse cookie string value in the header into a JavaScript Object
 app.use(cookieParser());
+// Set public folder for static files
+app.use(express.static('public'));
 
 app.get('/', routes.handleIndex);
 app.get('/sighting', routes.handleNewSighting);
