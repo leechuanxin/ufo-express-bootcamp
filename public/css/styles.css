@@ -1,3 +1,8 @@
+html,
+body {
+  height: 100%;
+}
+
 body {
   background: url("/images/background.gif");
   font-family: "Comic Sans MS", sans-serif;
