@@ -77,3 +77,11 @@ body {
 .table {
   color: white;
 }
+
+.offcanvas-body {
+  padding: 0;
+}
+
+.nav-pills .nav-link {
+  border-radius: 0;
+}
