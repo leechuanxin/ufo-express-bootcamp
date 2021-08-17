@@ -16,13 +16,67 @@
   <hr />
   <ul class="nav nav-pills flex-column mb-auto">
     <li class="nav-item">
-      <a href="/" class="nav-link active" aria-current="page">Home</a>
+      <a
+        href="/"
+        class="
+          nav-link
+          <%
+          if
+          (sidebar.active
+          &&
+          sidebar.active
+          ===
+          'home')
+          {
+          %>active<%
+          }
+          %>
+        "
+        aria-current="page"
+        >Home</a
+      >
     </li>
     <li>
-      <a href="/sighting" class="nav-link link-dark">New Sighting</a>
+      <a
+        href="/sighting"
+        class="
+          nav-link
+          link-dark
+          <%
+          if
+          (sidebar.active
+          &&
+          sidebar.active
+          ===
+          'new')
+          {
+          %>active<%
+          }
+          %>
+        "
+        >New Sighting</a
+      >
     </li>
     <li>
-      <a href="/shapes" class="nav-link link-dark">Shapes</a>
+      <a
+        href="/shapes"
+        class="
+          nav-link
+          link-dark
+          <%
+          if
+          (sidebar.active
+          &&
+          sidebar.active
+          ===
+          'shapes')
+          {
+          %>active<%
+          }
+          %>
+        "
+        >Shapes</a
+      >
     </li>
   </ul>
 </div>

@@ -1,20 +1,10 @@
 <%- include('headers/html-header', {title: 'Sightings'}); -%>
 <div class="container-fluid d-flex align-items-stretch">
   <div class="row align-items-stretch w-100">
-    <%- include('sidebar/sidebar', {}); -%>
-    <div class="col-12 col-md-9 pt-3">
-      <div class="row">
-        <div class="col-12 d-flex justify-content-center">
-          <div class="d-flex align-items-center">
-            <img src="images/alien-baby.gif" />
-            <h1 class="fire-text d-inline-block">UFO Sightings</h1>
-            <img src="images/alien-baby.gif" />
-          </div>
-        </div>
-      </div>
-      <p class="text-center">
-        You have visited this page <%= visits %> time(s).
-      </p>
+    <%- include('sidebar/sidebar', {sidebar: { active: "home"} }); -%>
+    <div class="col-12 col-md-9 py-3">
+      <%- include('headers/header', {}); -%>
+      <marquee>You have visited this page <%= visits %> time(s).</marquee>
       <% if (latest.length > 0) { %>
       <p
         href="/"

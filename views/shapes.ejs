@@ -8,8 +8,9 @@
 %>
 <div class="container-fluid d-flex align-items-stretch">
   <div class="row align-items-stretch w-100">
-    <%- include('sidebar/sidebar', {}); -%>
-    <div class="col-12 col-md-9">
+    <%- include('sidebar/sidebar', { sidebar : {active: 'shapes'}}); -%>
+    <div class="col-12 col-md-9 py-3">
+      <%- include('headers/header',{}); -%>
       <table class="table">
         <thead>
           <tr>
