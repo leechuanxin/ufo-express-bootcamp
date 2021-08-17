@@ -92,10 +92,12 @@
         <% sightings.forEach(sighting => { %>
         <div class="col-12 col-sm-6 col-md-4 mb-3">
           <p class="mb-1 text-center">
-            <img
-              class="img-fluid"
-              src="https://picsum.photos/900/600?random=<%= sighting.idx %>"
-            />
+            <a href="/sighting/<%= sighting.idx %>">
+              <img
+                class="img-fluid"
+                src="https://picsum.photos/900/600?random=<%= sighting.idx %>"
+              />
+            </a>
           </p>
           <p class="mb-1 text-center">
             <a class="created-link" href="/sighting/<%= sighting.idx %>">
